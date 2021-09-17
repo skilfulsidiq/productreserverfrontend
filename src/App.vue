@@ -1,30 +1,34 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div >
+    <component :is="main_layout"></component>
+    <!-- <router-view></router-view> -->
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { computed,defineAsyncComponent } from 'vue';
+import { useRoute } from "vue-router";
+export default {
+  
+  setup(){
 
-#nav {
-  padding: 30px;
+    const route = useRoute();
+    const main_layout = computed(()=> {
+      let link = route.meta.layout;
+      let page = link[0].toUpperCase()+link.slice(1)+".vue";
+      return defineAsyncComponent(() => import("./views/"+page))
+    }
+      // route.meta.layout=='backend'
+      // ? defineAsyncComponent(() => import("./views/layouts/Backend.vue"))
+      // : defineAsyncComponent(() => import("./views/layouts/Frontend.vue"))
+    )
+      
+    return{
+      main_layout
+    }
+  }
 }
+</script>
+<style >
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

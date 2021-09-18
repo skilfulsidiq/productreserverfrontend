@@ -1,8 +1,19 @@
 <template>
-    <div>
-        Hello
-        <router-view></router-view>
+    <div class="main">
+        <div class="container">
+            <div class="auth-pages">
+                <div class="card form-section">
+                    <div class="card-body">
+                            <router-view></router-view>
+                        
+                    </div>
+                    <!--  -->
+                </div>
+            
+            </div>
+        </div>
     </div>
+    
 </template>
 
 <script>
@@ -11,6 +22,23 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+    .main{
+        background-color: rgb(211, 207, 207);
+    }
+    .auth-pages{
+        display: flex;
+        /* flex-direction: column; */
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    .form-section{
+        /* border:1px solid #999; */
+        border-radius: 12px;
+        min-height: 30rem;
+        width:30rem;
 
+        
+    }
 </style>

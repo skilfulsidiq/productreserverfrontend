@@ -26,7 +26,7 @@ const auth_routes = [
          }
      },
      {
-         path: '/sign-up',
+         path: '/register',
          name: 'Register',
         component: () => import( /* webpackChunkName: "pages" */ './views/Signup.vue'),
          meta: {

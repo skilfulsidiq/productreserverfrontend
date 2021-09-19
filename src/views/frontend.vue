@@ -4,6 +4,10 @@
             <div class="auth-pages">
                 <div class="card form-section">
                     <div class="card-body">
+                        <router-link to="/">
+                            <h3 class="text-center text-bold">Product Reserved</h3>
+                        </router-link>
+                          
                             <router-view></router-view>
                         
                     </div>

@@ -31,23 +31,7 @@ const Token = {
     removeRefreshToken() {
         localStorage.removeItem(REFRESH_TOKEN_KEY)
     },
-    verifyUser(otp) {
-        localStorage.setItem(OTP, otp)
-    },
-    getVerifyCode() {
-        return localStorage.getItem(OTP);
-    },
-    saveUser(data) {
-        localStorage.setItem(AUTH_USER, data);
-    },
-    getUser() {
-
-        return localStorage.getItem(AUTH_USER)
-
-    },
-    removeUser() {
-        localStorage.removeItem(AUTH_USER)
-    }
+ 
 }
 
 export {

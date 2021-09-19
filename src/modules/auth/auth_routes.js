@@ -1,5 +1,5 @@
 import {
-    isLoggedIn
+    auth
 } from '@/router/middlewares/guards.js';
 import multiguard from 'vue-router-multiguard';
 import Signin from './views/Signin.vue'
@@ -8,7 +8,7 @@ import Page404 from './views/Page404.vue'
 const auth_routes = [
      {
          path: '/',
-         name: 'Home',
+         name: 'Welcome',
          component: Signin,
          meta: {
              layout: 'frontend',
@@ -19,6 +19,7 @@ const auth_routes = [
      {
          path: '/login',
          name: 'Login',
+           beforeEnter: multiguard([auth]),
          component: Signin,
          meta: {
              layout: 'frontend',
@@ -28,6 +29,7 @@ const auth_routes = [
      {
          path: '/register',
          name: 'Register',
+        beforeEnter: multiguard([auth]),
         component: () => import( /* webpackChunkName: "pages" */ './views/Signup.vue'),
          meta: {
              layout: 'frontend',

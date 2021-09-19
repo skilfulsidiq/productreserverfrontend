@@ -11,13 +11,13 @@ module.exports = {
         chainWebpack: config => {
             config.module.rules.delete('eslint');
         },
-    css: {
-        loaderOptions: {
-            sass: {
-                additionalData: 
-          `@import "@/assets/scss/global.scss";`
+    // css: {
+    //     loaderOptions: {
+    //         sass: {
+    //             additionalData: 
+    //       `@import "@/assets/scss/global.scss";`
         
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 };

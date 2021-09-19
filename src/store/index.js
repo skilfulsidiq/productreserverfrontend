@@ -6,7 +6,7 @@ import auth_module from '@/modules/auth/store/auth_module.js'
 import user_module from '@/modules/user/store/user_module.js'
 import admin_module from '@/modules/admin/store/admin_module.js'
 const vuexLocal = new VuexPersistence({
-  storage: window.sessionStorage,
+  storage: window.localStorage,
 })
 export default createStore({
  plugins: [

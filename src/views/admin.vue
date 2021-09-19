@@ -4,23 +4,26 @@
         <div class="layout">
             <div class="sidebar">
                 <ul class="link-parent">
-                    <li class="active">
+                    <li :class="[route.path=='/dashboard'?'active':'']">
                         <router-link class="action-link" to="/dashboard"> Dashboard</router-link>
                     </li>
-                    <li>
+                    <li :class="[route.path=='/all-products'?'active':'']">
                         <router-link class="action-link" to="/all-products"> All Products</router-link>
                     </li>
-                    <li>
+                    <li :class="[route.path=='/user-reserved-products'?'active':'']">
                         <router-link class="action-link" to="/user-reserved-products"> User Reserved Products</router-link>
                     </li>
-                    <li>
+                    <li :class="[route.path=='/all-users'?'active':'']"> 
                         <router-link class="action-link" to="/all-users"> All Users</router-link>
                     </li>
                   
                 </ul>
             </div>
             <div class="content">
-                 <router-view></router-view>
+                <div class="page">
+                     <router-view></router-view>
+                </div>
+                
             </div>
         </div>
        
@@ -28,10 +31,16 @@
 </template>
 
 <script>
+import { useRoute } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
     export default {
   components: { AppHeader },
-        
+        setup(){
+            const route = useRoute()
+            return{
+                route
+            }
+        }
     }
 </script>
 
@@ -41,7 +50,7 @@ import AppHeader from '../components/AppHeader.vue'
 
     }
     .sidebar{
-        width:250px;
+        width:300px;
         position: sticky;
         height: 100vh;
         overflow-y:scroll;
@@ -86,6 +95,7 @@ import AppHeader from '../components/AppHeader.vue'
         text-decoration: none;
     }
     .content{
-        width:calc(100%-250px);
+        /* width:calc(100%-0px); */
+        width:100%;
     }
 </style>

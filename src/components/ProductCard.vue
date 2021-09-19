@@ -1,25 +1,28 @@
 <template>
-  <div class="product-card cursor" @click="goToDetails(product.slug)">
+  <div class="product-card cursor" >
     <div class="image" :style="{backgroundImage:'url('+product.product_cover_image+')'}">
       <div class="icon-div">
-        <span v-if="!product.is_discount_active"></span>
-        <v-chip class="p-chip" label small color="secondary" text-color="white" v-if="product.is_discount_active">{{product.product_discount}}% OFF</v-chip>
-        <v-btn icon class="love-btn"> <v-icon color="white">mdi-heart-outline</v-icon> </v-btn>
+        <!-- <span v-if="!product.is_discount_active"></span> -->
+        <h6 v-if="product.is_discount_active"><span class="badge bg-danger text-white">{{product.product_discount}}% OFF</span></h6>
       </div>
 
     </div>
     <div class="product-info">
         <div class="name-sup">
-          <h5 class="supplier_name">by ade and Son</h5>
-           <h5 class="product-title text-wrap">{{product.product_name}} congrtaulation in advance gratewe ggt</h5>
+           <h5 class="product-title text-wrap">{{product.product_name}} </h5>
         </div>
-        <v-divider></v-divider>
+       
         <div class="price">
           <div class="price-row">
-            <span v-if="product.is_discount_active" class="price-line-ru">N {{product.price_before_discount}}</span>
-            <span class="main-price">N {{product.price_after_discount}}</span>
+            <span v-if="product.is_discount_active" class="price-line-ru mr-2">$ {{product.price_before_discount}} </span>
+            <span class="main-price">$ {{product.price_after_discount}}</span>
           </div>
-          <h6 class="moq">Minimum Order: {{product.product_moq}}</h6>
+        </div>
+        <div class="action-btn text-center px-3 mt-3">
+          <button class="btn btn-sm btn-outline-secondary btn-block" @click="isReserved?unReservedProduct(product.id):reservedProduct(product.id)">
+            <span v-if="!loading">{{isReserved?'Remove':'Reserve'}}</span>
+            <span v-if="loading">loading....</span>
+          </button>
         </div>
     </div>
 
@@ -30,18 +33,52 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import toast from "@/services/toast.js"
+import { useRouter } from 'vue-router'
   export default {
     props:{
-      product:{type:Object}
+      product:{type:Object},
+      isReserved:{type:Boolean,default:false},
     },
-    methods:{
-      goToList(){
-        this.$router.push("/market/products");
-      },
-      goToDetails(slug){
-        this.$router.push({name:'market-products-slug',params:{slug:slug}});
+    setup(props){
+      let loading = ref(false)
+      const store = useStore();
+      const router = useRouter();
+      let reservedProduct = (product_id)=>{
+        loading.value = true;
+        store.dispatch("reservedAProduct",product_id).then((res)=>{
+          loading.value=false
+          toast.success("Product Reserved successfully");
+            router.push({name:'ReservedProduct'})
+        }).catch(err=>{
+          loading.value=false
+          let e = err.response
+          toast.error(e.data);
+        })
       }
-    }
+        let unReservedProduct = (product_id)=>{
+          loading.value = true;
+          store.dispatch("unreservedAProductAction",product_id).then((res)=>{
+            loading.value=false
+            toast.success("Product remove from reserved successfully");
+              router.push({name:'Home'})
+          }).catch(err=>{
+            loading.value=false
+            let e = err.response
+            toast.error(e.data);
+          })
+        }
+      return{
+        loading,
+        reservedProduct,
+        unReservedProduct,
+        props
+      }
+    },
+   
+    
   }
 </script>
 
@@ -56,7 +93,7 @@
   .image{
     width:100%;
     height: 15rem;
-    border-radius:10px;
+    border-radius:10px 10px 0 0;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -69,21 +106,24 @@
 
     }
   .product-info{
-    height: 6.9rem;
+    height: 6rem;
     display: flex;
     flex-direction:column;
 
     background-color: transparent;
+    border:1px solid #999;
+      border-radius:0px 0px 10px 10px;
+   
     
     }
 
   .name-sup{
     padding:0.3rem;
-    height: 3.5rem;
+    height: 1.5rem;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction:column;
+    align-items: center;
+    justify-content: flex-start;
+    /* flex-direction:column; */
   }
     .supplier_name{
     margin-bottom: 0.1rem;
@@ -100,7 +140,7 @@
     }
   .price{
     padding:0.3rem;
-    height: 3.5rem;
+    height: 1rem;
       display: flex;
       align-items: flex-start;
       justify-content: center;

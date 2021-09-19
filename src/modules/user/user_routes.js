@@ -1,12 +1,23 @@
 import {
-    isLoggedIn
+    isLoggedIn,verify
 } from '@/router/middlewares/guards.js';
 import multiguard from 'vue-router-multiguard';
 const user_routes = [
        {
+           path: '/verify',
+           name: 'Verify',
+            beforeEnter: multiguard([isLoggedIn]),
+           component: () => import( /* webpackChunkName: "userpages" */ './views/Verify.vue'),
+           meta: {
+               layout: 'frontend',
+               title: 'Verify'
+           }
+       },
+       {
            path: '/home',
            name: 'Home',
-           component: () => import( /* webpackChunkName: "pages" */ './views/Home.vue'),
+           beforeEnter: multiguard([isLoggedIn,verify]),
+           component: () => import( /* webpackChunkName: "userpages" */ './views/Home.vue'),
            meta: {
                layout: 'backend',
                title: 'Home'
@@ -15,7 +26,8 @@ const user_routes = [
        {
            path: '/reserved-products',
            name: 'ReservedProduct',
-           component: () => import( /* webpackChunkName: "pages" */ './views/ReservedProduct.vue'),
+           beforeEnter: multiguard([isLoggedIn, verify]),
+           component: () => import( /* webpackChunkName: "userpages" */ './views/ReservedProduct.vue'),
            meta: {
                layout: 'backend',
                title: 'Reserved Product'

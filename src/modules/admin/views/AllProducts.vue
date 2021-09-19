@@ -97,15 +97,15 @@
                                 <div class="form-group">
                                     <label for="">Cover Image</label>
                                     <input @change="inputChanged" ref="fileInput" style="display:none" type="file" accept="image/*" id="file">
-                                    <button type="button" class="btn btn-dark" @click="triggerUpload">Upload </button>
-                                    <div class="img-preview" :style="{backgroundImage:'url('+preview+')'}"></div>
+                                    <!-- <button type="button" class="btn btn-dark" >Upload </button> -->
+                                    <div @click="triggerUpload" class="img-preview cursor" :style="{backgroundImage:'url('+preview+')'}"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="submit" class="btn btn-primary btn-block">
                              <span v-if="!loading"> Save</span>
                             <span v-else>loading....</span>
                         </button>

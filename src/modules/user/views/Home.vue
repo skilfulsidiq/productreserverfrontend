@@ -12,9 +12,10 @@
                 </div>
             </div>
             <div class="paginator text-center mt-5">
-                <paginator :pagination="pagination" mutator="ALL_PRODUCT" method="get"/> 
-              
+                <paginator :pagination="pagination" mutator="PAGINATED_PRODUCTS" method="get"/> 
+            
             </div>
+              <span @loadPaginatedProducts="determineProductToLoad"></span>
         </div>
     </div>
 </template>
@@ -27,10 +28,11 @@ import Paginator from '@/components/Paginator.vue';
  export default {
         components:{ProductCard,Paginator},
 
-        setup(){
+        setup({emit}){
             const store = useStore();
             let loading = ref(false);
             let total_count = ref(0);
+              let loadProduct = ref(false);
             let pagination = reactive({
                 links: '',
                 total: '',
@@ -51,13 +53,20 @@ import Paginator from '@/components/Paginator.vue';
             })
         
 
-            
-            //fecth all product on created
-            store.dispatch("allProductsAction").then((res)=>{
-                loading.value = false;
-            }).catch(err=>{
-                loading.value = false;
-            })
+           let determineProductToLoad = (v)=>{
+                loadProduct.value =v;
+            }
+
+            if(loadProduct){
+
+            }else{
+                //fecth all product on created
+                store.dispatch("allProductsAction").then((res)=>{
+                    loading.value = false;
+                }).catch(err=>{
+                    loading.value = false;
+                })
+            }
 
             const  fillPagination = (data)=> {
                 console.log("new page",data)
@@ -78,7 +87,8 @@ import Paginator from '@/components/Paginator.vue';
                 loading,
                 pagination,
                 allproducts,
-                total_count
+                total_count,
+                determineProductToLoad
             }
         },
         methods:{

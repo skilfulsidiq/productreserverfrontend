@@ -12,9 +12,10 @@
                 </div>
             </div>
             <div class="paginator text-center mt-5">
-                <paginator :pagination="pagination" mutator="ALL_PRODUCT" method="get"/> 
+                <paginator :pagination="pagination" mutator="PAGINATED_PRODUCTS" method="get"/> 
               
             </div>
+            <span @loadPaginatedProducts="determineProductToLoad"></span>
         </div>
     </div>
 </template>
@@ -26,10 +27,11 @@ import ProductCard from '@/components/ProductCard.vue';
 import Paginator from '@/components/Paginator.vue';
  export default {
         components:{ProductCard,Paginator},
-
-        setup(){
+        props:{},
+        setup(props,context){
             const store = useStore();
             let loading = ref(false);
+            let loadProduct = ref(false);
             let total_count = ref(0);
             let pagination = reactive({
                 links: '',
@@ -49,23 +51,25 @@ import Paginator from '@/components/Paginator.vue';
 
                 return products;
             })
-        
+            let determineProductToLoad = (v)=>{
+                loadProduct.value =v;
+            }
 
+            if(loadProduct){
+
+            }else{
+                    //fecth all product on created
+                    store.dispatch("allProductsAction").then((res)=>{
+                        loading.value = false;
+                    }).catch(err=>{
+                        loading.value = false;
+                    })
+            }
             
-            //fecth all product on created
-            store.dispatch("allProductsAction").then((res)=>{
-                loading.value = false;
-            }).catch(err=>{
-                loading.value = false;
-            })
+          
 
             const  fillPagination = (data)=> {
                 console.log("new page",data)
-                // links.value = data.links;
-                // total.value = data.total
-                // count.value = data.to;
-                // path.value = data.path;
-                // currentPage.value = data.current_page
                 pagination.links = data.links;
                 pagination.total = data.total
                 pagination.count = data.to;
@@ -78,7 +82,8 @@ import Paginator from '@/components/Paginator.vue';
                 loading,
                 pagination,
                 allproducts,
-                total_count
+                total_count,
+                determineProductToLoad
             }
         },
         methods:{

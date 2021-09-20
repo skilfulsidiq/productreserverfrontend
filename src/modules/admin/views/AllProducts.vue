@@ -37,6 +37,11 @@
                 </tbody>
             </table>
         </div>
+         <div class="paginator text-center mt-5">
+                <paginator :pagination="pagination" mutator="PAGINATED_PRODUCTS" method="get"/> 
+              
+            </div>
+            <span @loadPaginatedProducts="determineProductToLoad"></span>
     </div>
     <!-- modal -->
     <div class="modal fade" id="product_modal" data-backdrop="static" data-keyboard="false"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -124,7 +129,9 @@ import toast from '@/services/toast.js'
 import { required, email,minLength} from '@vuelidate/validators'
 import useValidate from '@vuelidate/core';
 import { useRouter } from 'vue-router';
+import Paginator from '@/components/Paginator.vue';
     export default {
+  components: { Paginator },
         data(){return{
             file:'',
             preview:'ok',
@@ -135,6 +142,7 @@ import { useRouter } from 'vue-router';
             const store = useStore();
             const router= useRouter
             let loading = ref(false);
+            let loadProduct = ref(false);
             let delloading = ref(false);
              const form = reactive({
                     product_name:'',
@@ -144,6 +152,15 @@ import { useRouter } from 'vue-router';
                     discount_start_date:'',
                     discount_end_date:''
             })
+            let pagination = reactive({
+                links: '',
+                total: '',
+                count: '',
+                path: '',
+                currentPage: '',
+                next_page_url: '',
+                prev_page_url: ''
+            })
           const Rules = computed(() => {
             return{
                   product_name:{required},
@@ -152,19 +169,36 @@ import { useRouter } from 'vue-router';
         
         })
         let allproducts = computed(()=>{
-                let all =  store.state.user_module.all_products;
-
-                return all;
+                let all =  store.state.user_module.paginated_products;
+                 let products= all.data;
+                fillPagination(all);
+                return products;
             })
         const v$ = useValidate(Rules, form)
 
-            
-            //fecth all product on created
-            store.dispatch("allProductsForAdminAction").then((res)=>{
-                loading.value = false;
-            }).catch(err=>{
-                loading.value = false;
-            })
+        const  fillPagination = (data)=> {
+            pagination.links = data.links;
+            pagination.total = data.total
+            pagination.count = data.to;
+            pagination.path = data.path;
+            pagination.currentPage = data.current_page
+        }
+
+             let determineProductToLoad = (v)=>{
+                loadProduct.value =v;
+            }
+
+            if(loadProduct){
+
+            }else{
+                //fecth all product on created
+                store.dispatch("allProductsAction").then((res)=>{
+                    loading.value = false;
+                }).catch(err=>{
+                    loading.value = false;
+                })
+            }
+          
          
             const deleteProduct = (slug)=>{
                 delloading.value = true;
@@ -189,8 +223,10 @@ import { useRouter } from 'vue-router';
                 loading,
                 allproducts,
                 delloading,
+                pagination,
                 deleteProduct,
-                openProductForm
+                openProductForm,
+                determineProductToLoad
                 
             }
         },

@@ -28,7 +28,7 @@ export default {
         mutator:{type:String},
         method:{type:String,default:'get'}
     },
-    setup(props){
+    setup(props,context){
         let totalPage = ref(0);
         let store = useStore();
         let {pagination,mutator,method,title}=toRefs(props);
@@ -41,7 +41,7 @@ export default {
             }
           
             let data = {url :u, mutator:mutator,method:method,form:form}
-           
+           context.emit("loadPaginatedProducts",true)
             store.dispatch("paginationAction",data).then((res)=>{
 
             }).catch(err=>{

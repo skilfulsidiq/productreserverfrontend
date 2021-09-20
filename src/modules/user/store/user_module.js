@@ -39,8 +39,7 @@ const actions = {
    async allProductsAction({commit}){
        let res = await api.allProducts();
        let r = res.data.data;
-       console.log("r", r)
-              commit("PAGINATED_PRODUCTS", r);
+        commit("PAGINATED_PRODUCTS", r);
        return res;
    },
    async allProductsForAdminAction({commit}){

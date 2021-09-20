@@ -7,17 +7,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ml-auto">
-        <li class="nav-item active" v-if="inRoute">
-            <router-link class="nav-link"  to="/home"> Home </router-link>
-            <!-- <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> -->
-        </li>
-        <li class="nav-item active" v-if="inRoute">
-             <router-link class="nav-link"  to="/reserved-products"> Reserved Products  </router-link>
-            <!-- <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a> -->
-        </li>
-        <li class="nav-item active" v-if="isLoggedIn">
-            <a class="nav-link" href="#" @click="logout">Logout <span class="sr-only"></span></a>
-        </li>
+            <li class="nav-item" :class="[route.path=='/home'?'active':'']" v-if="inRoute">
+                <router-link class="nav-link"  to="/home"> Home </router-link>
+            </li>
+            <li class="nav-item" :class="[route.path=='/reserved-products'?'active':'']" v-if="inRoute">
+                <router-link class="nav-link"  to="/reserved-products"> Reserved Products  </router-link>
+            </li>
+            <li class="nav-item"   v-if="isLoggedIn">
+                <a class="nav-link" href="#" @click="logout">Logout <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item" :class="[route.path=='/login'?'active':'']" v-if="!isLoggedIn">
+                <router-link class="nav-link" to="/login">Login </router-link>
+            </li>
        
         </ul>
     </div>
@@ -49,7 +50,8 @@ import {Token} from "@/services/token.js"
             })
             return{
                 inRoute,
-                isLoggedIn
+                isLoggedIn,
+                route
             }
            
         },

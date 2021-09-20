@@ -20,7 +20,7 @@
         </div>
         <div class="action-btn text-center px-3 mt-3">
           <button class="btn btn-sm btn-outline-secondary btn-block" @click="isReserved?unReservedProduct(product.id):reservedProduct(product.id)">
-            <span v-if="!loading">{{isReserved?'Remove':'Reserve'}}</span>
+            <span v-if="!loading">{{isReserved?'Remove':'Book'}}</span>
             <span v-if="loading">loading....</span>
           </button>
         </div>
@@ -36,6 +36,7 @@
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import toast from "@/services/toast.js"
+import {Token} from "@/services/token.js"
 import { useRouter } from 'vue-router'
   export default {
     props:{
@@ -47,16 +48,20 @@ import { useRouter } from 'vue-router'
       const store = useStore();
       const router = useRouter();
       let reservedProduct = (product_id)=>{
-        loading.value = true;
-        store.dispatch("reservedAProduct",product_id).then((res)=>{
-          loading.value=false
-          toast.success("Product Reserved successfully");
-            router.push({name:'ReservedProduct'})
-        }).catch(err=>{
-          loading.value=false
-          let e = err.response
-          toast.error(e.data);
-        })
+        if(Token.getToken()){
+          loading.value = true;
+          store.dispatch("reservedAProduct",product_id).then((res)=>{
+            loading.value=false
+            toast.success("Product Reserved successfully");
+              router.push({name:'ReservedProduct'})
+          }).catch(err=>{
+            loading.value=false
+            let e = err.response
+            toast.error(e.data);
+          })
+        }else{
+          router.push('/login')
+        }
       }
         let unReservedProduct = (product_id)=>{
           loading.value = true;

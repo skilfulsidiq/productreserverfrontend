@@ -15,7 +15,7 @@
              <router-link class="nav-link"  to="/reserved-products"> Reserved Products  </router-link>
             <!-- <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a> -->
         </li>
-        <li class="nav-item active">
+        <li class="nav-item active" v-if="isLoggedIn">
             <a class="nav-link" href="#" @click="logout">Logout <span class="sr-only"></span></a>
         </li>
        
@@ -29,6 +29,7 @@
 import toast from '@/services/toast.js'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import {Token} from "@/services/token.js"
     export default {
 
         setup(){
@@ -40,9 +41,17 @@ import { useRoute } from 'vue-router'
                 // return p.includes(route.path);
                 return s;
             })
+             const isLoggedIn = computed(()=>{
+                if(Token.getToken()){
+                    return true
+                }
+                return false
+            })
             return{
-                inRoute
+                inRoute,
+                isLoggedIn
             }
+           
         },
         methods:{
                   logout(){

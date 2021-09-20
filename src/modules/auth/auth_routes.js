@@ -3,15 +3,15 @@ import {
 } from '@/router/middlewares/guards.js';
 import multiguard from 'vue-router-multiguard';
 import Signin from './views/Signin.vue'
-import Home from './views/Home.vue'
+import Welcome from './views/Welcome.vue'
 import Page404 from './views/Page404.vue'
 const auth_routes = [
      {
          path: '/',
          name: 'Welcome',
-         component: Signin,
+         component: Welcome,
          meta: {
-             layout: 'frontend',
+             layout: 'backend',
              title:'Home'
          }
      },
